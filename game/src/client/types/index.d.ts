@@ -229,3 +229,17 @@ interface RotateState {
   left: boolean;
   right: boolean;
 }
+
+type QBMenu = MenuItem[];
+
+interface MenuItem {
+  header: string;
+  txt?: string;
+  isMenuHeader?: boolean;
+  params?: MenuItemParams;
+}
+
+interface MenuItemParams {
+  event: string;
+  args?: any;
+}
