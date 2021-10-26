@@ -7,8 +7,6 @@ let PlayerData: PlayerData = null;
 let currentAction: string = null;
 // let currentActionMessage: string = null;
 // let hasEnteredMarker: boolean = false;
-// let allMyOutfits = {};
-// let isPurchaseSuccessful: boolean = false;
 
 onNet('QBCore:ClientOnPlayerLoaded', () => {
   QBCore.Functions.TriggerCallback('fivem-appearance:getskin', skin => {
@@ -123,4 +121,33 @@ onNet('fivem-appearance:barberMenu', () => {
       emitNet('fivem-appearance:save');
     }
   }, config);
+});
+
+onNet('fivem-appearance:pickNewOutfit', (data) => {
+  const id = data.id;
+  const number = data.number;
+  QBCore.Functions.TriggerCallback('fivem-appearance:getOutfits', (outfits: Outfit[]) => {
+    const outfitMenu: QBMenu = [
+      {
+        header: '< Go Back',
+        params: {
+          event: 'fivem-appearance:clothingShop',
+        },
+      },
+    ];
+    outfits.forEach(outfit => {
+      outfitMenu.push({
+        header: outfit.name,
+        params: {
+          event: 'fivem-appearance:setOutfit',
+          args: {
+            ped: outfit.pedModel,
+            components: outfit.pedComponents,
+            props: outfit.pedProps,
+          },
+        },
+      });
+    });
+    exp['qb-menu'].openMenu(outfitMenu);
+  });
 });

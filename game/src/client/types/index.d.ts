@@ -243,3 +243,10 @@ interface MenuItemParams {
   event: string;
   args?: any;
 }
+
+interface Outfit {
+  name: string;
+  pedModel: string;
+  pedComponents: PedComponent[];
+  pedProps: PedProp[];
+}
