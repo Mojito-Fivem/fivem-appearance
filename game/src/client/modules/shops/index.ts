@@ -1,5 +1,6 @@
 import { QBCore } from '../../qbcore';
 import { PlayerData } from 'qbcore.js/common/common';
+import {Delay} from "../../utils";
 
 const exp = global.exports;
 let PlayerData: PlayerData = null;
@@ -148,4 +149,19 @@ onNet('fivem-appearance:pickNewOutfit', () => {
     });
     exp['qb-menu'].openMenu(outfitMenu);
   });
+});
+
+onNet('fivem-appearance:setOutfit', async data => {
+  const { ped, components, props } = data;
+  let pedId = PlayerPedId();
+  const currentModel = exp['fivem-appearance'].getPedModel(pedId);
+  if (currentModel !== ped) {
+    exp['fivem-appearance'].setPlayerModel(ped);
+  }
+  await Delay(500);
+  pedId = PlayerPedId();
+  exp['fivem-appearance'].setPedComponents(components);
+  exp['fivem-appearance'].setPedProps(props);
+  const appearance = exp['fivem-appearance'].getPedAppearance(pedId);
+  emitNet('fivem-appearance:save', appearance);
 });
