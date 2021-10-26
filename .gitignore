@@ -7,3 +7,5 @@ game/yarn.lock
 web/node_modules/
 web/build/
 web/yarn.lock
+
+.idea
