@@ -86,3 +86,41 @@ onNet('fivem-appearance:clothingShop', () => {
   ];
   exp['qb-menu'].openMenu(menu);
 });
+
+onNet('fivem-appearance:clothingMenu', () => {
+  QBCore.Functions.TriggerCallback('fivem-appearance:buyclothing', (success: boolean) => {
+    if (success) {
+      const config: CustomizationConfig = {
+        ped: false,
+        headBlend: false,
+        faceFeatures: false,
+        headOverlays: false,
+        components: true,
+        props: true,
+      };
+      exp['fivem-appearance'].startPlayerCustomization(appearance => {
+        if (appearance) {
+          emitNet('fivem-appearance:save');
+        }
+      }, config);
+    } else {
+      QBCore.Functions.Notify('You cannot afford this', 'error');
+    }
+  });
+});
+
+onNet('fivem-appearance:barberMenu', () => {
+  const config: CustomizationConfig = {
+    ped: false,
+    headBlend: false,
+    faceFeatures: false,
+    headOverlays: true,
+    components: false,
+    props: false,
+  };
+  exp['fivem-appearance'].startPlayerCustomization(appearance => {
+    if (appearance) {
+      emitNet('fivem-appearance:save');
+    }
+  }, config);
+});
