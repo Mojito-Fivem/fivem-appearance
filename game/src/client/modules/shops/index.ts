@@ -213,3 +213,10 @@ onNet('fivem-appearance:deleteOutfitMenu', () => {
     exp['qb-menu'].OpenMenu(DeleteMenu);
   });
 });
+
+onNet('fivem-appearance:deleteOutfit', data => {
+  const { id } = data;
+  emitNet('fivem-appearance:deleteOutfit', id);
+  emit('fivem-appearance:clothingShop');
+  QBCore.Functions.Notify('Your outfit has been deleted');
+});
