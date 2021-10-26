@@ -249,4 +249,5 @@ interface Outfit {
   pedModel: string;
   pedComponents: PedComponent[];
   pedProps: PedProp[];
+  id?: number;
 }

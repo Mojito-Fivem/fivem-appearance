@@ -187,3 +187,28 @@ onNet('fivem-appearance:saveOutfit', async () => {
     emitNet('fivem-appearance:saveOutfit', input.input, model, components, props);
   }
 });
+
+onNet('fivem-appearance:deleteOutfitMenu', () => {
+  QBCore.Functions.TriggerCallback('fivem-appearance:getOutfits', (outfits: Outfit[]) => {
+    const DeleteMenu: QBMenu = [
+      {
+        header: '< Go Back',
+        params: {
+          event: 'fivem-appearance:clothingShop',
+        },
+      },
+    ];
+    outfits.forEach(outfit => {
+      DeleteMenu.push({
+        header: 'Delete' + outfit.name,
+        txt: 'This action cannot be undone!',
+        params: {
+          event: 'fivem-appearance:deleteOutfit',
+          args: {
+            id: outfit.id,
+          },
+        },
+      });
+    });
+  });
+});
