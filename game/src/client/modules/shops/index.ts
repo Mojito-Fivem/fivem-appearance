@@ -210,5 +210,6 @@ onNet('fivem-appearance:deleteOutfitMenu', () => {
         },
       });
     });
+    exp['qb-menu'].OpenMenu(DeleteMenu);
   });
 });
