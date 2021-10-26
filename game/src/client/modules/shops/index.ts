@@ -165,3 +165,25 @@ onNet('fivem-appearance:setOutfit', async data => {
   const appearance = exp['fivem-appearance'].getPedAppearance(pedId);
   emitNet('fivem-appearance:save', appearance);
 });
+
+onNet('fivem-appearance:saveOutfit', async () => {
+  const input = await exp['qb-input'].ShowInput({
+    header: 'Name your outfit',
+    submitText: 'Create Outfit',
+    inputs: [
+      {
+        text: 'Outfit Name',
+        name: 'input',
+        type: 'text',
+        isRequired: true,
+      },
+    ],
+  });
+  if (input) {
+    const pedId = PlayerPedId();
+    const model = exp['fivem-appearance'].getPedModel(pedId);
+    const components = exp['fivem-appearance'].getPedComponents(pedId);
+    const props = exp['fivem-appearance'].getPedProps(pedId);
+    emitNet('fivem-appearance:saveOutfit', input.input, model, components, props);
+  }
+});
