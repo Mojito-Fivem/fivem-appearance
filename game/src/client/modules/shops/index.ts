@@ -123,9 +123,7 @@ onNet('fivem-appearance:barberMenu', () => {
   }, config);
 });
 
-onNet('fivem-appearance:pickNewOutfit', (data) => {
-  const id = data.id;
-  const number = data.number;
+onNet('fivem-appearance:pickNewOutfit', () => {
   QBCore.Functions.TriggerCallback('fivem-appearance:getOutfits', (outfits: Outfit[]) => {
     const outfitMenu: QBMenu = [
       {
