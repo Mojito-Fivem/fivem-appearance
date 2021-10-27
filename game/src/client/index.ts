@@ -393,7 +393,7 @@ setInterval(() => {
   let currentZone = 0;
   let isInClothing = false;
   let isInBarbers = false;
-  
+
   CONFIG.ClothingShops.forEach((shop, index) => {
     const dist = distance(PlayerCoords, shop);
     if (dist <= 2.5) {
@@ -401,7 +401,7 @@ setInterval(() => {
       currentZone = index;
     }
   });
-  
+
   CONFIG.BarberShops.forEach((shop, index) => {
     const dist = distance(PlayerCoords, shop);
     if (dist <= 2.5) {
@@ -409,7 +409,7 @@ setInterval(() => {
       currentZone = index;
     }
   });
-  
+
   if ((isInClothing && !hasEnteredMarker) || (isInClothing && lastZone != currentZone)) {
     hasEnteredMarker = true;
     lastZone = currentZone;
@@ -463,6 +463,26 @@ RegisterCommand(
 function init(): void {
   Customization.loadModule();
   Shops.loadModule();
+
+  CONFIG.ClothingShops.forEach(shop => {
+    const blip = AddBlipForCoord(shop.x, shop.y, shop.z);
+    SetBlipSprite(blip, 73);
+    SetBlipScale(blip, 0.7);
+    SetBlipAsShortRange(blip, true);
+    BeginTextCommandSetBlipName('STRING');
+    AddTextComponentSubstringPlayerName('Clothing Shop');
+    EndTextCommandSetBlipName(blip);
+  });
+
+  CONFIG.BarberShops.forEach(shop => {
+    const blip = AddBlipForCoord(shop.x, shop.y, shop.z);
+    SetBlipSprite(blip, 71);
+    SetBlipScale(blip, 0.7);
+    SetBlipAsShortRange(blip, true);
+    BeginTextCommandSetBlipName('STRING');
+    AddTextComponentSubstringPlayerName('Barber Shop');
+    EndTextCommandSetBlipName(blip);
+  });
 
   exp('getPedModel', getPedModel);
   exp('getPedComponents', getPedComponents);
