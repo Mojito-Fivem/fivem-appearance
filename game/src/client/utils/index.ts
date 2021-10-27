@@ -16,3 +16,11 @@ export function arrayToVector3(coords: number[]): Vector3 {
     z: coords[2],
   };
 }
+
+export function distance(coords, tocoords): number {
+  if (Array.isArray(tocoords)) {
+    tocoords = arrayToVector3(tocoords);
+  }
+  coords = arrayToVector3(coords);
+  return Math.hypot(coords.x - tocoords.x, coords.y - tocoords.y);
+}

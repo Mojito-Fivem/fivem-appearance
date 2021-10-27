@@ -251,3 +251,8 @@ interface Outfit {
   pedProps: PedProp[];
   id?: number;
 }
+
+interface ScriptConfig {
+  ClothingShops: Vector3[];
+  BarberShops: Vector3[];
+}

@@ -1,4 +1,4 @@
-import { Delay, isPedFreemodeModel } from './utils';
+import {Delay, distance, isPedFreemodeModel} from './utils';
 
 import {
   FACE_FEATURES,
@@ -19,6 +19,8 @@ const GET_PED_HEAD_BLEND_DATA = '0x2746bd9d88c5c5d0';
 export const pedModels: string[] = JSON.parse(
   LoadResourceFile(GetCurrentResourceName(), 'peds.json'),
 );
+
+const CONFIG: ScriptConfig = JSON.parse(LoadResourceFile(GetCurrentResourceName(), 'config.json'));
 
 const pedModelsByHash = pedModels.reduce((object, model) => {
   return { ...object, [GetHashKey(model)]: model };
@@ -379,6 +381,64 @@ function setPedAppearance(ped: number, appearance: Omit<PedAppearance, 'model'>)
     setPedEyeColor(ped, eyeColor);
   }
 }
+
+let CurrentAction = '';
+let lastZone = 0;
+let hasEnteredMarker = false;
+
+setInterval(() => {
+  const PlayerPed = PlayerPedId();
+  const PlayerCoords = GetEntityCoords(PlayerPed, false);
+  let currentZone = 0;
+  let isInClothing = false;
+  let isInBarbers = false;
+  
+  CONFIG.ClothingShops.forEach((shop, index) => {
+    const dist = distance(PlayerCoords, shop);
+    if (dist <= 2.5) {
+      isInClothing = true;
+      currentZone = index;
+    }
+  });
+  
+  CONFIG.BarberShops.forEach((shop, index) => {
+    const dist = distance(PlayerCoords, shop);
+    if (dist <= 2.5) {
+      isInBarbers = true;
+      currentZone = index;
+    }
+  });
+  
+  if ((isInClothing && !hasEnteredMarker) || (isInClothing && lastZone != currentZone)) {
+    hasEnteredMarker = true;
+    lastZone = currentZone;
+    CurrentAction = 'clothing';
+    emit('cd_drawtextui:ShowUI', 'show', '[E] Clothing Menu');
+  }
+  if ((isInBarbers && !hasEnteredMarker) || (isInBarbers && lastZone != currentZone)) {
+    hasEnteredMarker = true;
+    lastZone = currentZone;
+    CurrentAction = 'barbers';
+    emit('cd_drawtextui:ShowUI', 'show', '[E] Clothing Menu');
+  }
+  if (!isInClothing && !isInBarbers && hasEnteredMarker) {
+    emit('cd_drawtextui:HideUI');
+  }
+}, 2000);
+
+RegisterCommand(
+  'openclotheshop',
+  () => {
+    if (CurrentAction == 'clothing') {
+      emit('fivem-appearance:clothingShop');
+    } else if (CurrentAction == 'barbers') {
+      emit('fivem-appearance:barberMenu');
+    }
+  },
+  false,
+);
+
+RegisterKeyMapping('openclotheshop', 'Open Clothing stores', 'keyboard', 'e');
 
 function init(): void {
   Customization.loadModule();
