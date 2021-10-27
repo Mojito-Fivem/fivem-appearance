@@ -1,4 +1,5 @@
 import {Delay, distance, isPedFreemodeModel} from './utils';
+import { QBCore } from './qbcore';
 
 import {
   FACE_FEATURES,
@@ -439,6 +440,25 @@ RegisterCommand(
 );
 
 RegisterKeyMapping('openclotheshop', 'Open Clothing stores', 'keyboard', 'e');
+
+RegisterCommand(
+  'reloadskin',
+  () => {
+    QBCore.Functions.TriggerCallback('fivem-appearance:getPlayerSkin', (appearance) => {
+      setPlayerAppearance(appearance);
+    });
+    const OBJ_POOL = GetGamePool('CObject');
+    const PLY_PED = PlayerPedId();
+    OBJ_POOL.forEach(obj => {
+      if (IsEntityAttachedToEntity(PLY_PED, obj)) {
+        SetEntityAsMissionEntity(obj, true, true);
+        DeleteObject(obj);
+        DeleteEntity(obj);
+      }
+    });
+  },
+  false,
+);
 
 function init(): void {
   Customization.loadModule();
