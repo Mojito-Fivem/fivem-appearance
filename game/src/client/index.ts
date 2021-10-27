@@ -10,6 +10,7 @@ import {
 } from './constants';
 
 import Customization from './modules/customization';
+import Shops from './modules/shops';
 
 const exp = (global as any).exports;
 
@@ -381,6 +382,7 @@ function setPedAppearance(ped: number, appearance: Omit<PedAppearance, 'model'>)
 
 function init(): void {
   Customization.loadModule();
+  Shops.loadModule();
 
   exp('getPedModel', getPedModel);
   exp('getPedComponents', getPedComponents);
