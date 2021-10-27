@@ -1,5 +1,4 @@
 import { QBCore } from './qbcore';
-import { monitorEventLoopDelay } from 'perf_hooks';
 
 const exp = (global as any).exports;
 
